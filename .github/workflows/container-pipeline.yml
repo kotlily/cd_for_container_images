@@ -49,5 +49,5 @@ jobs:
     with:
       environment: Production
     permissions:
-      packages: read
+      packages: write
     secrets: inherit
