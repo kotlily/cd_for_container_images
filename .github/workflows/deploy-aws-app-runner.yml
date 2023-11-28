@@ -26,8 +26,7 @@ jobs:
       url: ${{ vars.URL }}
     runs-on: ubuntu-latest
     permissions:
-      packages: read
-      contents: read
+      packages: write
     concurrency:
       group: deploy-${{ inputs.environment }}
       cancel-in-progress: false
