@@ -41,11 +41,16 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Prepare to push to ECR
+        if: ${{ inputs.environment }} == 'Staging'
+        id: pre-push
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+          
       - name: Deploy staging with push to ECR
         if: ${{ inputs.environment }} == 'Staging'
         id: push
         run: |
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
           docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
           docker push ${{ secrets.AWS_ACCOUNT_NUMBER }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
 
